@@ -36,6 +36,10 @@ public class Evolution {
         Random random = new Random() ;
         
         for ( int g = 0 ; g < numberOfGenerations ; g++ ) {
+            
+            if ( population.getBestIndividual().getFitness() == 26 ) 
+                break ;
+            
             System.out.println( population.getBestIndividual() ) ;
 
             ArrayList<Individual> newInds = new ArrayList<>() ;

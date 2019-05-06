@@ -72,6 +72,7 @@ public class Individual {
     }
     
     public double getFitness() {
+        //System.out.println( this.fitness );
         return this.fitness;
     }
     
@@ -86,11 +87,12 @@ public class Individual {
     public void mutate( double mutationRate ) {
         
         Random rand = new Random() ;
-        int rand_num = rand.nextInt( myPoints.size() ) ;
+        double rand_num = rand.nextDouble() ;
         
         for ( Coordinates xy : myPoints  ) {
-            if ( rand_num < mutationRate ) 
-                xy.swap() ;
+            if ( rand_num < mutationRate ) {
+                xy = hillClimbing( xy ) ;
+            } 
         }
         
     }
@@ -131,6 +133,76 @@ public class Individual {
     public String toString() {
         return "{" + myPoints + '}';
     }
+
+    private ArrayList<Coordinates> generateNeighbourhood( Coordinates xy ) {
+        ArrayList<Coordinates> neighbourhood = new ArrayList<>() ;
+        neighbourhood.add( xy ) ;
+        
+        if ( xy.getX() != 0 ) {
+            Coordinates tmp = new Coordinates( xy.getX() - 1, xy.getY() ) ;
+            neighbourhood.add( tmp ) ;
+            
+            if ( xy.getY() != 0 ) {
+                tmp = new Coordinates( xy.getX() - 1, xy.getY() - 1  ) ;
+                neighbourhood.add( tmp ) ;
+            }
+            
+            if ( xy.getY() != 15 ) {
+                tmp = new Coordinates( xy.getX() - 1, xy.getY() + 1  ) ;
+                neighbourhood.add( tmp ) ;
+            }
+        }
+        
+        if ( xy.getX() != 15 ) {
+            Coordinates tmp = new Coordinates( xy.getX() + 1, xy.getY() ) ;
+            neighbourhood.add( tmp ) ;
+            
+            if ( xy.getY() != 0 ) {
+                tmp = new Coordinates( xy.getX() + 1, xy.getY() - 1  ) ;
+                neighbourhood.add( tmp ) ;
+            }
+            
+            if ( xy.getY() != 15 ) {
+                tmp = new Coordinates( xy.getX() + 1, xy.getY() + 1  ) ;
+                neighbourhood.add( tmp ) ;
+            }
+        }
+        
+        if ( xy.getY() != 15 ) {
+            Coordinates tmp = new Coordinates( xy.getX(), xy.getY() + 1 ) ;
+            neighbourhood.add( tmp ) ;
+        }
+        
+        if ( xy.getY() != 0 ) {
+            Coordinates tmp = new Coordinates( xy.getX(), xy.getY() - 1 ) ;
+            neighbourhood.add( tmp ) ;
+        }
+        
+        return neighbourhood ;
+    }
+    
+    private Coordinates hillClimbing( Coordinates xy ) {
+        ArrayList<Coordinates> neighbourhood = generateNeighbourhood( xy ) ;
+        Individual tmp = this.deepCopy() ;
+        tmp.myPoints.remove(xy) ;
+        
+        double bestFitness = Double.NEGATIVE_INFINITY ;
+        Coordinates winner = null ;
+        
+        for ( Coordinates neigh : neighbourhood ) {
+            tmp.myPoints.add(neigh) ;
+            tmp.computeFitness() ;
+            if ( tmp.getFitness() > bestFitness ) {
+                winner = neigh ;
+                bestFitness = tmp.getFitness() ;
+            }
+            tmp.myPoints.remove( neigh ) ;
+        }
+        
+        return winner ;
+    }
+
+
     
 
 }

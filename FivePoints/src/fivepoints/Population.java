@@ -56,7 +56,7 @@ public class Population {
             double bestFitness = Double.NEGATIVE_INFINITY ;
             Individual winner = null ;
             
-            for( int k = 0 ; k < 20 ; k++ ) {
+            for( int k = 0 ; k < this.individuals.length/count ; k++ ) {
                 
                 Individual candidate = this.individuals[random.nextInt(this.individuals.length)] ;
                 if( candidate.getFitness() > bestFitness ) {
@@ -76,7 +76,7 @@ public class Population {
 
     @Override
     public String toString() {
-        return "Population{" + "individuals=" + individuals + '}';
+        return "Population{" + " " + individuals + '}';
     }
     
     

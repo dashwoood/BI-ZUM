@@ -21,7 +21,7 @@ public class Semestralni_prace_ZUM {
                 System.out.print( symbol[xy.getX()][xy.getY()]) ;
             }
             if ( symbols.indexOf(symbol) != symbols.size() - 1 )
-                System.out.print(",") ;
+                System.out.print(", ") ;
             else 
                 System.out.print("\n") ;
         }
@@ -32,7 +32,7 @@ public class Semestralni_prace_ZUM {
         ArrayList<int[][]> symbols = inputHandler.getSymbols() ;
         System.out.println( inputHandler.getSize() ) ;
         
-        Evolution evolution = new Evolution( 1000, 100, 0.2, 0.3, symbols ) ; 
+        Evolution evolution = new Evolution( 1000, 100, 0.15, 0.6, symbols ) ; 
         evolution.start() ;
         ArrayList<Coordinates> result = evolution.getResult() ;
         
