@@ -31,13 +31,22 @@ public class Evolution {
     
     public void start ( ) {
         
+        Integer katastrofa = 0 ;
+        double previousFit ;
         long start = System.currentTimeMillis() ;
         population = new Population( this, this.populationSize, this.symbols ) ;
         Random random = new Random() ;
         
         for ( int g = 0 ; g < numberOfGenerations ; g++ ) {
+            if ( katastrofa == 10 ) {
+                System.out.println("KATASTROFA!") ;
+                population.disaster() ;
+                katastrofa = 0 ; 
+            }
             
-            if ( population.getBestIndividual().getFitness() == 26 ) 
+            previousFit = population.getBestIndividual().getFitness() ;
+            
+            if ( previousFit == 26 ) 
                 break ;
             
             System.out.println( population.getBestIndividual() ) ;
@@ -69,13 +78,16 @@ public class Evolution {
             for( int i=0 ; i < newInds.size() ; i++ ) {
                 population.setIndividualAt(i, newInds.get(i)) ;
             }
+            
+            if ( previousFit == population.getBestIndividual().getFitness() )
+                katastrofa++ ;
         }
         
         long end = System.currentTimeMillis() ;
         Individual best = population.getBestIndividual() ;
 
         System.out.println("Evolution has finished after " + (( end - start ) / 1000.0) + " s...") ;
-        System.out.println("Best fitness = " + population.getBestIndividual().getFitness()) ;
+        System.out.println("Best fitness = " + best.getFitness()) ;
         
         // add some result printing ...
         result = population.getBestIndividual().getMyPoints() ;

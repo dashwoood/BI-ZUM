@@ -19,9 +19,14 @@ public class Population {
     private Random random;
     private Individual[] individuals ;
     private int size ;
+    private Evolution evolution ;
+    private ArrayList<int[][]> symbols ;
+    
     
     public Population( Evolution evolution, int size, ArrayList<int[][]> symbols ) {
         this.random = new Random() ;
+        this.symbols = symbols ;
+        this.evolution = evolution ;
         this.size = size ;
         this.individuals = new Individual[size] ;
         for ( int i = 0; i < this.individuals.length; i++ ) {
@@ -32,6 +37,14 @@ public class Population {
 
     public int getSize() {
         return size;
+    }
+    
+    public void disaster() {
+        this.individuals[0] = getBestIndividual().deepCopy() ;
+        for ( int i = 0; i < this.individuals.length - 1; i++ ) {
+            this.individuals[i] = new Individual (this.evolution, true, this.symbols) ;
+            this.individuals[i].computeFitness() ;
+        }
     }
     
     public Individual getBestIndividual () {
@@ -56,7 +69,7 @@ public class Population {
             double bestFitness = Double.NEGATIVE_INFINITY ;
             Individual winner = null ;
             
-            for( int k = 0 ; k < this.individuals.length/count ; k++ ) {
+            for( int k = 0 ; k < 5 ; k++ ) {
                 
                 Individual candidate = this.individuals[random.nextInt(this.individuals.length)] ;
                 if( candidate.getFitness() > bestFitness ) {

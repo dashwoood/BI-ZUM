@@ -30,6 +30,8 @@ public class Individual {
         this.myPoints = new ArrayList<>() ;
         this.symbols = symbols ;
         
+        //Simple random inicialization 
+        /*
         if ( randomInit ) {
             while ( this.myPoints.size() < 5 ) {
                 Integer x = this.random.nextInt( 16 ) ;
@@ -40,7 +42,36 @@ public class Individual {
                 else 
                     this.myPoints.add( xy ) ;
             }
+        } */
+        
+        // Heuristic inicialization 
+        if ( randomInit ) {
+            Integer x = this.random.nextInt( 16 ) ;
+            Integer y = this.random.nextInt( 16 ) ;
+            Coordinates xy = new Coordinates( x, y ) ;
+            this.myPoints.add( xy ) ;
+            
+            while ( this.myPoints.size() < 5 ) {
+                x = this.random.nextInt( 16 ) ;
+                y = this.random.nextInt( 16 ) ;
+                xy = new Coordinates( x, y ) ;
+                if ( tooNear( xy ) ) 
+                    continue ;
+                else 
+                    this.myPoints.add( xy ) ;
+            }
+        } 
+    }
+    
+    public boolean tooNear ( Coordinates xy ) {
+        
+        for ( Coordinates c : myPoints ) {
+            if ( Math.sqrt( Math.pow((c.getX() - xy.getX()), 2) + Math.pow((c.getY() - xy.getY()), 2 )) < 2 ) {
+                return true ;
+            }
         }
+        
+        return false ;
     }
 
     public ArrayList<Coordinates> getMyPoints() {

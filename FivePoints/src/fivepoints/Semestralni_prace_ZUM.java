@@ -32,7 +32,7 @@ public class Semestralni_prace_ZUM {
         ArrayList<int[][]> symbols = inputHandler.getSymbols() ;
         System.out.println( inputHandler.getSize() ) ;
         
-        Evolution evolution = new Evolution( 1000, 100, 0.15, 0.6, symbols ) ; 
+        Evolution evolution = new Evolution( 100, 100, 0.2, 0.3, symbols ) ; 
         evolution.start() ;
         ArrayList<Coordinates> result = evolution.getResult() ;
         
