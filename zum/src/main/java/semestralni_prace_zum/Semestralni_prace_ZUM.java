@@ -6,6 +6,7 @@
 package semestralni_prace_zum;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,6 +19,10 @@ public class Semestralni_prace_ZUM {
         InputHandler inputHandler = new InputHandler("src/main/resources") ;
         System.out.println( inputHandler.getSize() ) ;
         
-        HillClimbing hillClimbing = new HillClimbing( inputHandler.getSymbols() ) ; 
+        Evolution evolution = new Evolution( 100, 100, 0.2, 0.3 ) ; 
+        evolution.start() ;
+        ArrayList<Coordinates> result = evolution.getResult() ;
+        
+        System.out.println( result ) ;
     }  
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package semestralni_prace_zum;
+package fivepoints;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +18,20 @@ public class Population {
 
     private Random random;
     private Individual[] individuals ;
+    private int size ;
     
-    public Population( Evolution evolution, int size ) {
-        individuals = new Individual[size] ;
-        for ( int i = 0; i < individuals.length; i++ ) {
-            individuals[i] = new Individual (evolution, true) ;
-            individuals[i].computeFitness() ;
+    public Population( Evolution evolution, int size, ArrayList<int[][]> symbols ) {
+        this.random = new Random() ;
+        this.size = size ;
+        this.individuals = new Individual[size] ;
+        for ( int i = 0; i < this.individuals.length; i++ ) {
+            this.individuals[i] = new Individual (evolution, true, symbols) ;
+            this.individuals[i].computeFitness() ;
         }
+    }
+
+    public int getSize() {
+        return size;
     }
     
     public Individual getBestIndividual () {
@@ -66,4 +73,11 @@ public class Population {
     void setIndividualAt( int i, Individual ind ) {
         this.individuals[i] = ind.deepCopy() ;
     }
+
+    @Override
+    public String toString() {
+        return "Population{" + "individuals=" + individuals + '}';
+    }
+    
+    
 }

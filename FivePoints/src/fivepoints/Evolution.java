@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package semestralni_prace_zum;
+package fivepoints;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,28 +17,27 @@ public class Evolution {
     private final Double mutationRate ;
     private final Double crossoverRate ;
     private ArrayList<Coordinates> result ;
+    ArrayList<int[][]> symbols ;
     
     Population population;
 
-    public Evolution( Integer populationSize, Integer numberOfGenerations, Double mutationRate, Double crossoverRate ) { 
+    public Evolution( Integer populationSize, Integer numberOfGenerations, Double mutationRate, Double crossoverRate, ArrayList<int[][]> symbols ) { 
         this.populationSize = populationSize ;
         this.mutationRate = mutationRate ;
         this.crossoverRate = crossoverRate ;
         this.numberOfGenerations = numberOfGenerations ;
+        this.symbols = symbols ;
     }
     
     public void start ( ) {
         
         long start = System.currentTimeMillis() ;
-        population = new Population( this, this.populationSize ) ;
+        population = new Population( this, this.populationSize, this.symbols ) ;
         Random random = new Random() ;
         
         for ( int g = 0 ; g < numberOfGenerations ; g++ ) {
-            
-            if ( population.getBestIndividual().getFitness() == 26 ) {
-                break ;
-            }
-            
+            System.out.println( population.getBestIndividual() ) ;
+
             ArrayList<Individual> newInds = new ArrayList<>() ;
             newInds.add( population.getBestIndividual().deepCopy() ) ;
             

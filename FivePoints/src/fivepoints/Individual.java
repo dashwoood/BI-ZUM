@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package semestralni_prace_zum;
+package fivepoints;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import javafx.util.Pair;
 
@@ -19,23 +20,54 @@ public class Individual {
     private double fitness = Double.NaN;
     private Evolution evolution;
     private ArrayList<Coordinates> myPoints ;
+    private ArrayList<int[][]> symbols ;
             
     private Random random;
 
-    public Individual( Evolution evolution, boolean randomInit ) {
+    public Individual( Evolution evolution, boolean randomInit, ArrayList<int[][]> symbols ) {
         this.evolution = evolution ;
+        this.random = new Random() ;
+        this.myPoints = new ArrayList<>() ;
+        this.symbols = symbols ;
         
-        //definition of the points 
+        if ( randomInit ) {
+            while ( this.myPoints.size() < 5 ) {
+                Integer x = this.random.nextInt( 16 ) ;
+                Integer y = this.random.nextInt( 16 ) ;
+                Coordinates xy = new Coordinates( x, y ) ;
+                if ( this.myPoints.contains( xy )) 
+                    continue ;
+                else 
+                    this.myPoints.add( xy ) ;
+            }
+        }
     }
 
     public ArrayList<Coordinates> getMyPoints() {
         return myPoints;
     }
     
+    private boolean compare ( int[][] symbol1, int[][] symbol2 ) {
+        for ( Coordinates xy : this.myPoints ) {
+            if ( symbol1[xy.getX()][xy.getY()] == symbol2[xy.getX()][xy.getY()] ) 
+               return false ;
+        }
+        return true ;
+    }
+    
     public void computeFitness() {
                 
         double result = 0 ;
-        // how many pics differ in those 5 points = fitness
+        HashSet<String> different = new HashSet<>() ;
+        
+        for ( int[][] symbol : this.symbols ) {
+            String tmp = "" ;
+            for ( Coordinates xy : this.myPoints ) {
+                tmp += symbol[xy.getX()][xy.getY()] ;
+            }
+            different.add(tmp) ;
+        }
+        result = different.size() ;
         this.fitness = result;
     }
     
@@ -69,8 +101,8 @@ public class Individual {
         int p = r.nextInt( this.myPoints.size() - 1 ) ;
         
         
-        Individual off1 = new Individual( evolution, false ) ;
-        Individual off2 = new Individual( evolution, false ) ;
+        Individual off1 = new Individual( this.evolution, false, this.symbols ) ;
+        Individual off2 = new Individual( this.evolution, false, this.symbols ) ;
         
         for ( int i = 0 ; i < myPoints.size() ; i++ ) {
             if ( i < p ) {
@@ -88,12 +120,17 @@ public class Individual {
     }
     
     public Individual deepCopy() {
-        Individual newOne = new Individual(evolution, false);
-        System.arraycopy(this.myPoints, 0, newOne.myPoints, 0, this.myPoints.size());  
+        Individual newOne = new Individual(this.evolution, false, this.symbols ) ;
+        newOne.myPoints = (ArrayList<Coordinates>) this.myPoints.clone() ;
         newOne.fitness = this.fitness;
         
         return newOne;
     }
+
+    @Override
+    public String toString() {
+        return "{" + myPoints + '}';
+    }
     
-    
+
 }
