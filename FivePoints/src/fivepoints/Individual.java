@@ -44,7 +44,7 @@ public class Individual {
             }
         } */
         
-        // Heuristic inicialization 
+        // Better inicialization 
         if ( randomInit ) {
             Integer x = this.random.nextInt( 16 ) ;
             Integer y = this.random.nextInt( 16 ) ;
@@ -103,7 +103,6 @@ public class Individual {
     }
     
     public double getFitness() {
-        //System.out.println( this.fitness );
         return this.fitness;
     }
     
@@ -122,7 +121,9 @@ public class Individual {
         
         for ( Coordinates xy : myPoints  ) {
             if ( rand_num < mutationRate ) {
-                xy = hillClimbing( xy ) ;
+                Coordinates tmp = hillClimbing( xy ) ;
+                xy.setX( tmp.getX() ) ;
+                xy.setY( tmp.getY() ) ;
             } 
         }
         
@@ -131,7 +132,7 @@ public class Individual {
       public Pair crossover( Individual other ) {
         Random r = new Random();
         
-        int p = r.nextInt( this.myPoints.size() - 1 ) ;
+        int p = r.nextInt( this.myPoints.size() ) ;
         
         
         Individual off1 = new Individual( this.evolution, false, this.symbols ) ;
@@ -148,7 +149,55 @@ public class Individual {
                 
         }
         
-        Pair <Individual,Individual> result = new Pair( off1, off2) ;
+        off1.computeFitness() ; 
+        off2.computeFitness() ;
+        Pair <Individual,Individual> result = new Pair ( off1, off2 ) ;
+        //Pair <Individual,Individual> result = deterministicCrowding( this, other, off1, off2 ) ;
+        return result ;
+    }
+      
+    private int countSimilarity( Individual off, Individual parent ) {
+        int result = 0 ;
+        
+        for ( Coordinates c : off.getMyPoints() ) {
+            for ( Coordinates xy : parent.getMyPoints() ) {
+                result *= Math.sqrt( Math.pow((c.getX() - xy.getX()), 2) + Math.pow((c.getY() - xy.getY()), 2 )) ;
+            }  
+        }
+        
+        return result ;
+    }
+      
+    public Pair deterministicCrowding ( Individual parent1, Individual parent2, Individual off1, Individual off2 ) {
+        
+        Individual survived1, survived2 ;
+        
+        if ( countSimilarity( off1, parent1 ) < countSimilarity( off1, parent2 ) ) {
+            if ( parent1.getFitness() > off1.getFitness() )
+                survived1 = parent1.deepCopy() ;
+            else 
+                survived1 = off1.deepCopy() ;
+        } else {
+            if ( parent2.getFitness() > off1.getFitness() )
+                survived1 = parent2.deepCopy() ;
+            else 
+                survived1 = off1.deepCopy() ; 
+        }
+        
+        if ( countSimilarity( off2, parent1 ) < countSimilarity( off2, parent2 ) ) {
+            if ( parent1.getFitness() > off2.getFitness() )
+                survived2 = parent1.deepCopy() ;
+            else 
+                survived2 = off2.deepCopy() ;
+        } else {
+            if ( parent2.getFitness() > off2.getFitness() )
+                survived2 = parent2.deepCopy() ;
+            else 
+                survived2 = off2.deepCopy() ; 
+        }
+        
+        Pair <Individual,Individual> result = new Pair( survived1, survived2 ) ;
+        
         return result ;
     }
     

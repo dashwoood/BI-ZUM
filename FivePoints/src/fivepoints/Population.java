@@ -40,10 +40,11 @@ public class Population {
     }
     
     public void disaster() {
-        this.individuals[0] = getBestIndividual().deepCopy() ;
-        for ( int i = 0; i < this.individuals.length - 1; i++ ) {
-            this.individuals[i] = new Individual (this.evolution, true, this.symbols) ;
-            this.individuals[i].computeFitness() ;
+        this.setIndividualAt(0, this.getBestIndividual()) ;
+        for ( int i = 1; i < this.individuals.length - 1; i++ ) {
+            Individual a = new Individual (this.evolution, true, this.symbols) ;
+            a.computeFitness() ;
+            this.setIndividualAt(i, a) ;
         }
     }
     

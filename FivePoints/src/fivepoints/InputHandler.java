@@ -49,13 +49,13 @@ public class InputHandler {
                 int color = image.getRGB(yPixel, xPixel) ;
                 if (color==Color.BLACK.getRGB()) {
                     array2D[xPixel][yPixel] = 1 ;
-                    System.out.print("o") ;
+                    //System.out.print("o") ;
                 } else {
                     array2D[xPixel][yPixel] = 0 ; 
-                    System.out.print("-") ;
+                    //System.out.print("-") ;
                 }
             }
-            System.out.print("\n") ;
+            //System.out.print("\n") ;
         }
         this.symbols.add( array2D ) ;
     }

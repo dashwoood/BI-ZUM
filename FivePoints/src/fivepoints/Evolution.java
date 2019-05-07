@@ -33,22 +33,24 @@ public class Evolution {
         
         Integer katastrofa = 0 ;
         double previousFit ;
-        long start = System.currentTimeMillis() ;
+        long start = System.currentTimeMillis() ;  
         population = new Population( this, this.populationSize, this.symbols ) ;
         Random random = new Random() ;
         
         for ( int g = 0 ; g < numberOfGenerations ; g++ ) {
+            
+            // if the bestFitness is the same for 10 gens - copy the best one and randomly inicialize the others 
             if ( katastrofa == 10 ) {
-                System.out.println("KATASTROFA!") ;
+                System.out.println("Disaster!") ;
                 population.disaster() ;
                 katastrofa = 0 ; 
             }
             
             previousFit = population.getBestIndividual().getFitness() ;
-            
             if ( previousFit == 26 ) 
                 break ;
             
+            System.out.print( population.getBestIndividual().getFitness()+ "   " ) ;
             System.out.println( population.getBestIndividual() ) ;
 
             ArrayList<Individual> newInds = new ArrayList<>() ;
@@ -59,18 +61,18 @@ public class Evolution {
                 List<Individual> parents = population.selectIndividuals(2) ;
                 Pair<Individual,Individual> offspring ;
 
-                if( crossoverRate < random.nextDouble() ) 
+                if( random.nextDouble() < crossoverRate ) {
+                    // Deterministic crowding in crossover
                     offspring = parents.get(0).deepCopy().crossover(parents.get(1).deepCopy()) ;
-                else 
+                } else 
                     offspring = new Pair<>( parents.get(0).deepCopy(), parents.get(1).deepCopy()) ;
-
+                
+                // HillClimbing in mutation 
                 offspring.getKey().mutate( mutationRate ) ;
-                offspring.getKey().computeFitness() ;
                 newInds.add(offspring.getKey()) ;
                 
                 if( newInds.size() < populationSize ) {
                     offspring.getValue().mutate( mutationRate ) ;
-                    offspring.getValue().computeFitness() ;
                     newInds.add(offspring.getValue()) ;
                 }
             }
@@ -89,7 +91,6 @@ public class Evolution {
         System.out.println("Evolution has finished after " + (( end - start ) / 1000.0) + " s...") ;
         System.out.println("Best fitness = " + best.getFitness()) ;
         
-        // add some result printing ...
         result = population.getBestIndividual().getMyPoints() ;
 
         System.out.println("========== Evolution finished =============") ;
