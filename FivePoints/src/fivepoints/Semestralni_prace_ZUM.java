@@ -7,6 +7,7 @@ package fivepoints;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  *
@@ -62,10 +63,19 @@ public class Semestralni_prace_ZUM {
         InputHandler inputHandler = new InputHandler("src/resources") ;
         ArrayList<int[][]> symbols = inputHandler.getSymbols() ;
         
+        Comparator<Coordinates> comparator = new Comparator<Coordinates>() {
+            @Override
+            public int compare(Coordinates o1, Coordinates o2) {
+                   return o1.getY().compareTo(o2.getY());
+            }
+        };
+            
         Evolution evolution = new Evolution( 1000, 1000, 0.2, 0.5, symbols ) ; 
         evolution.start() ;
         ArrayList<Coordinates> result = evolution.getResult() ;
         
+        result.sort( comparator ) ;
+
         System.out.println( result ) ;
         printResult(result, symbols) ;
         changeSymbols(result, symbols ) ;

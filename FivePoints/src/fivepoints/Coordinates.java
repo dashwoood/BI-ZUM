@@ -5,6 +5,7 @@
  */
 package fivepoints;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Objects;
 public class Coordinates {
     private Integer x ;
     private Integer y ; 
-
+   
     public Coordinates(Integer x, Integer y) {
         this.x = x;
         this.y = y;

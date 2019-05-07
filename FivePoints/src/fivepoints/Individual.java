@@ -151,20 +151,26 @@ public class Individual {
         
         off1.computeFitness() ; 
         off2.computeFitness() ;
+        
+        //Simple crossover 
         Pair <Individual,Individual> result = new Pair ( off1, off2 ) ;
+        
+        //Crossover using Deterministic Crowding
         //Pair <Individual,Individual> result = deterministicCrowding( this, other, off1, off2 ) ;
         return result ;
     }
       
-    private int countSimilarity( Individual off, Individual parent ) {
-        int result = 0 ;
+    private double countDifference( Individual off, Individual parent ) {
+        double result = 0 ;
         
-        for ( Coordinates c : off.getMyPoints() ) {
-            for ( Coordinates xy : parent.getMyPoints() ) {
-                result *= Math.sqrt( Math.pow((c.getX() - xy.getX()), 2) + Math.pow((c.getY() - xy.getY()), 2 )) ;
-            }  
+        for ( int i = 0 ; i < 5 ; i++ ) {
+                double res = Math.sqrt( Math.pow((off.getPoints(i).getX() - parent.getPoints(i).getX()), 2) + Math.pow((off.getPoints(i).getY() - parent.getPoints(i).getY()), 2 )) ;
+                if ( res != 0 )
+                    result += res ;
+                else 
+                    result *= 0.5 ;
         }
-        
+            
         return result ;
     }
       
@@ -172,7 +178,7 @@ public class Individual {
         
         Individual survived1, survived2 ;
         
-        if ( countSimilarity( off1, parent1 ) < countSimilarity( off1, parent2 ) ) {
+        if ( countDifference( off1, parent1 ) < countDifference( off1, parent2 ) ) {
             if ( parent1.getFitness() > off1.getFitness() )
                 survived1 = parent1.deepCopy() ;
             else 
@@ -184,7 +190,7 @@ public class Individual {
                 survived1 = off1.deepCopy() ; 
         }
         
-        if ( countSimilarity( off2, parent1 ) < countSimilarity( off2, parent2 ) ) {
+        if ( countDifference( off2, parent1 ) < countDifference( off2, parent2 ) ) {
             if ( parent1.getFitness() > off2.getFitness() )
                 survived2 = parent1.deepCopy() ;
             else 

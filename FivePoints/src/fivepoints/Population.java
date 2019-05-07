@@ -40,6 +40,7 @@ public class Population {
     }
     
     public void disaster() {
+        this.getBestIndividual().mutate(1) ;
         this.setIndividualAt(0, this.getBestIndividual()) ;
         for ( int i = 1; i < this.individuals.length - 1; i++ ) {
             Individual a = new Individual (this.evolution, true, this.symbols) ;

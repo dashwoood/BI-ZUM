@@ -36,8 +36,8 @@ public class Evolution {
         long start = System.currentTimeMillis() ;  
         population = new Population( this, this.populationSize, this.symbols ) ;
         Random random = new Random() ;
-        
-        for ( int g = 0 ; g < numberOfGenerations ; g++ ) {
+        int g ;
+        for ( g = 0 ; g < numberOfGenerations ; g++ ) {
             
             // if the bestFitness is the same for 10 gens - copy the best one and randomly inicialize the others 
             if ( katastrofa == 10 ) {
@@ -89,6 +89,7 @@ public class Evolution {
         Individual best = population.getBestIndividual() ;
 
         System.out.println("Evolution has finished after " + (( end - start ) / 1000.0) + " s...") ;
+        System.out.println("Generation number = " + g ) ;
         System.out.println("Best fitness = " + best.getFitness()) ;
         
         result = population.getBestIndividual().getMyPoints() ;
